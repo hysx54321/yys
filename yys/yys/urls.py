@@ -16,6 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from income_calculator import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    path('events/', views.dummy, name='events'),
+    path('event_entities/', views.dummy, name='event_entities'),
+    path('event_groups/', views.dummy, name='event_groups'),
+    path('items/', views.ItemListView.as_view(), name='items'),
+    path('new_item/', views.new_item, name='new_item'),
+    path('item/<int:pk>/', views.ItemDetailView.as_view(), name='item_detail'),
+    path('item/<int:item_id>/delete', views.dummy, name='item_delete'),
+    path('item/<int:item_id>/edit', views.dummy, name='item_edit'),
+    path('periods/', views.dummy, name='periods'),
 ]

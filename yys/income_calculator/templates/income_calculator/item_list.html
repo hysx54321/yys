@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Item List</h1>
+<a href="{% url 'new_item'%}">New Item</a>
+  {% if item_list %}
+    <table>
+      <tr>
+        <th>Description</th>
+        <th>Comment</th>
+        <th>Time Created</th>
+        <th>Time Modified</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+      {% for item in item_list %}
+        <tr>
+          <td>{{ item.description }}</td>
+          <td>{{ item.comment }}</td>
+          <td>{{ item.time_created_string }}</td>
+          <td>{{ item.time_modified_string }}</td>
+          <td><a href="{% url 'item_edit' item.id %}">Edit</a></td>
+          <td><a href="{% url 'item_delete' item.id %}">Delete</a></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no items.</p>
+  {% endif %}
+{% endblock %}

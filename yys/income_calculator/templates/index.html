@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Welcome</h1>
+  <ul>
+    <li><strong>Events:</strong> <a href="{% url 'events'%}">{{ num_events }}</a></li>
+    <li><strong>Event Entities:</strong> <a href="{% url 'event_entities'%}">{{ num_entities }}</a></li>
+    <li><strong>Event Groups:</strong> <a href="{% url 'event_groups'%}">{{ num_groups }}</a></li>
+    <li><strong>Periods:</strong> <a href="{% url 'periods'%}">{{ num_periods }}</a></li>
+    <li><strong>Items:</strong> <a href="{% url 'items'%}">{{ num_items }}</a></li>
+  </ul>
+{% endblock %}

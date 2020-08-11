@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import datetime
 
 # Create your models here.
 class BasicModel(models.Model):
@@ -13,6 +13,14 @@ class BasicModel(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.description
+
+    @property
+    def time_created_string(self):
+        return datetime.fromtimestamp(self.time_created)
+
+    @property
+    def time_modified_string(self):
+        return datetime.fromtimestamp(self.time_modified)
 
 
 class Event(BasicModel):

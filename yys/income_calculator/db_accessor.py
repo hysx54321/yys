@@ -116,6 +116,7 @@ def create_item(description, comment):
         deleted=False,
     )
     new_item.save()
+    return new_item
 
 
 def get_item_by_id(item_id):

@@ -1,0 +1,8 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <p><strong>Description</strong> {{ item_detail.description }}</p>
+  <p><strong>Comment</strong> {{ item_detail.comment }}</p>
+  <p><strong>Time Created</strong> {{ item_detail.time_created_string }}</p>
+  <p><strong>Time Modified</strong> {{ item_detail.time_modified_string }}</p>
+{% endblock %}

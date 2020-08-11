@@ -5,7 +5,7 @@ from django.db import models
 class BasicModel(models.Model):
     id = models.AutoField(primary_key=True)
     description = models.CharField(max_length=50)  # a short description of the object
-    comment = models.TextField()
+    comment = models.TextField(null=True)
     time_created = models.PositiveIntegerField()
     time_modified = models.PositiveIntegerField()
     deleted = models.BooleanField()
@@ -17,15 +17,24 @@ class BasicModel(models.Model):
 
 class Event(BasicModel):
     display_name = models.CharField(max_length=20)
+    priority = models.SmallIntegerField()
+    default_frequency = models.IntegerField()
+    icon = models.TextField(null=True)
+    period_id = models.PositiveIntegerField()
+    event_group_id = models.PositiveIntegerField(null=True)
+
+
+class EventGroup(BasicModel):
+    pass
+
+
+class EventEntity(BasicModel):
+    event_id = models.PositiveIntegerField()
+    item_id = models.PositiveIntegerField()
     min = models.IntegerField()
     max = models.IntegerField()
     expectation_value = models.IntegerField()
-    default_frequency = models.IntegerField()
     default_total = models.IntegerField()
-    priority = models.SmallIntegerField()
-    period_id = models.PositiveIntegerField()
-    item_id = models.PositiveIntegerField()
-    icon = models.TextField()
 
 
 class Item(BasicModel):

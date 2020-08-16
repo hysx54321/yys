@@ -1,0 +1,65 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Event Entity List</h1>
+<a href="{% url 'new_event_entity' event_id=event.id %}">New Entity</a>
+<table>
+    <tr>
+      <th>Number of Days</th>
+      <th>Name</th>
+      <th>Comment</th>
+      <th>Time Created</th>
+      <th>Time Modified</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    <tr>
+      <td>{{ event.num_days }}</td>
+      <td>{{ event.display_name }}</td>
+      <td>{{ event.comment }}</td>
+      <td>{{ event.time_created_string }}</td>
+      <td>{{ event.time_modified_string }}</td>
+      <td><a href="{% url 'event_edit' event.id %}">Edit</a></td>
+      <td>
+      <form action="{% url 'event_delete' %}" method="post" onsubmit="return confirm('Do you really want to delete {{ event }}?')">
+        {% csrf_token %}
+        <input type="hidden" name="event_entity_id" value="{{event.id}}">
+        <input type="submit" value="Delete">
+      </form>
+      </td>
+    </tr>
+</table>
+<hr/>
+  {% if event_entity_list %}
+    <table>
+      <tr>
+        <th>Number of Days</th>
+        <th>Name</th>
+        <th>Comment</th>
+        <th>Time Created</th>
+        <th>Time Modified</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+      {% for event_entity in event_entity_list %}
+        <tr>
+          <td>{{ event_entity.num_days }}</td>
+          <td>{{ event_entity.display_name }}</td>
+          <td>{{ event_entity.comment }}</td>
+          <td>{{ event_entity.time_created_string }}</td>
+          <td>{{ event_entity.time_modified_string }}</td>
+          <td><a href="{% url 'event_entity_edit' event_entity.id %}">Edit</a></td>
+          <td>
+          <form action="{% url 'event_entity_delete' %}" method="post" onsubmit="return confirm('Do you really want to delete {{ event_entity }}?')">
+            {% csrf_token %}
+            <input type="hidden" name="event_entity_id" value="{{event_entity.id}}">
+            <input type="submit" value="Delete">
+          </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no event_entitys.</p>
+  {% endif %}
+{% endblock %}

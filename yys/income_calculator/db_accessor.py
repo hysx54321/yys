@@ -11,22 +11,18 @@ from income_calculator.models import (
 # Event
 def create_event(
     display_name,
-    description,
     default_frequency,
     comment,
     period_id,
-    item_id,
     event_group_id=None,
     priority=1,
     icon="",
 ):
     new_event = Event(
         display_name=display_name,
-        description=description,
         default_frequency=default_frequency,
         comment=comment,
         period_id=period_id,
-        item_id=item_id,
         event_group_id=event_group_id,
         time_created=utils.get_current_timestamp(),
         time_modified=utils.get_current_timestamp(),
@@ -35,6 +31,7 @@ def create_event(
         deleted=False,
     )
     new_event.save()
+    return new_event
 
 
 def get_event_by_id(event_id):
@@ -44,11 +41,14 @@ def get_event_by_id(event_id):
     return None
 
 
+def get_events(**kwargs):
+    return Event.objects.filter(**kwargs)
+
+
 # Event Entity
 def create_event_entity(
     event,
     display_name,
-    description,
     minimum,
     maximum,
     expectation_value,
@@ -57,7 +57,6 @@ def create_event_entity(
 ):
     new_event_entity = EventEntity(
         display_name=display_name,
-        description=description,
         min=minimum,
         max=maximum,
         expectation_value=expectation_value,
@@ -70,6 +69,7 @@ def create_event_entity(
         deleted=False,
     )
     new_event_entity.save()
+    return new_event_entity
 
 
 def get_event_entity_by_id(event_entity_id):
@@ -88,15 +88,16 @@ def get_event_entities_by_period_id_and_item_id(period_id, item_id):
 
 
 # Event Group
-def create_event_group(description, comment):
+def create_event_group(display_name, comment):
     new_event_group = EventGroup(
-        description=description,
+        display_name=display_name,
         comment=comment,
         time_created=utils.get_current_timestamp(),
         time_modified=utils.get_current_timestamp(),
         deleted=False,
     )
     new_event_group.save()
+    return new_event_group
 
 
 def get_event_group_by_id(event_group_id):
@@ -107,9 +108,9 @@ def get_event_group_by_id(event_group_id):
 
 
 # Item
-def create_item(description, comment):
+def create_item(display_name, comment):
     new_item = Item(
-        description=description,
+        display_name=display_name,
         comment=comment,
         time_created=utils.get_current_timestamp(),
         time_modified=utils.get_current_timestamp(),
@@ -130,17 +131,32 @@ def get_items(**kwargs):
     return Item.objects.filter(**kwargs)
 
 
+def get_active_items():
+    return get_items(deleted=False)
+
+
+def delete_item(item_id):
+    items = Item.objects.filter(id=item_id)
+    if not items:
+        return
+    item = items[0]
+    item.deleted = True
+    item.save()
+    return item
+
+
 # Period
-def create_period(description, comment, num_days):
+def create_period(display_name, comment, num_days):
     new_period = Period(
         num_days=num_days,
-        description=description,
+        display_name=display_name,
         comment=comment,
         time_created=utils.get_current_timestamp(),
         time_modified=utils.get_current_timestamp(),
         deleted=False,
     )
     new_period.save()
+    return new_period
 
 
 def get_period_by_id(period_id):
@@ -152,3 +168,17 @@ def get_period_by_id(period_id):
 
 def get_periods(**kwargs):
     return Period.objects.filter(**kwargs)
+
+
+def get_active_periods():
+    return get_periods(deleted=False)
+
+
+def delete_period(period_id):
+    periods = Period.objects.filter(id=period_id)
+    if not periods:
+        return
+    period = periods[0]
+    period.deleted = True
+    period.save()
+    return period

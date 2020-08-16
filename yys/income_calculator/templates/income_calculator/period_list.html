@@ -1,0 +1,38 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Period List</h1>
+<a href="{% url 'new_period'%}">New Period</a>
+  {% if period_list %}
+    <table>
+      <tr>
+        <th>Number of Days</th>
+        <th>Name</th>
+        <th>Comment</th>
+        <th>Time Created</th>
+        <th>Time Modified</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+      {% for period in period_list %}
+        <tr>
+          <td>{{ period.num_days }}</td>
+          <td>{{ period.display_name }}</td>
+          <td>{{ period.comment }}</td>
+          <td>{{ period.time_created_string }}</td>
+          <td>{{ period.time_modified_string }}</td>
+          <td><a href="{% url 'period_edit' period.id %}">Edit</a></td>
+          <td>
+          <form action="{% url 'period_delete' %}" method="post" onsubmit="return confirm('Do you really want to delete {{ period }}?')">
+            {% csrf_token %}
+            <input type="hidden" name="period_id" value="{{period.id}}">
+            <input type="submit" value="Delete">
+          </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no periods.</p>
+  {% endif %}
+{% endblock %}

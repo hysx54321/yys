@@ -6,7 +6,7 @@
   {% if item_list %}
     <table>
       <tr>
-        <th>Description</th>
+        <th>Name</th>
         <th>Comment</th>
         <th>Time Created</th>
         <th>Time Modified</th>
@@ -15,12 +15,18 @@
       </tr>
       {% for item in item_list %}
         <tr>
-          <td>{{ item.description }}</td>
+          <td>{{ item.display_name }}</td>
           <td>{{ item.comment }}</td>
           <td>{{ item.time_created_string }}</td>
           <td>{{ item.time_modified_string }}</td>
           <td><a href="{% url 'item_edit' item.id %}">Edit</a></td>
-          <td><a href="{% url 'item_delete' item.id %}">Delete</a></td>
+          <td>
+          <form action="{% url 'item_delete' %}" method="post" onsubmit="return confirm('Do you really want to delete {{ item }}?')">
+            {% csrf_token %}
+            <input type="hidden" name="item_id" value="{{item.id}}">
+            <input type="submit" value="Delete">
+          </form>
+          </td>
         </tr>
       {% endfor %}
     </table>

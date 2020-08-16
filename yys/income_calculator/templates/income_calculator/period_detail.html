@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <a href="{% url 'periods'%}">Period List</a><br/>
+  <a href="{% url 'new_period'%}">New Period</a>
+  <p><strong>Number of Days</strong> {{ period_detail.num_days }}</p>
+  <p><strong>Name</strong> {{ period_detail.display_name }}</p>
+  <p><strong>Comment</strong> {{ period_detail.comment }}</p>
+  <p><strong>Time Created</strong> {{ period_detail.time_created_string }}</p>
+  <p><strong>Time Modified</strong> {{ period_detail.time_modified_string }}</p>
+{% endblock %}

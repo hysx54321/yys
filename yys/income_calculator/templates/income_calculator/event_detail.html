@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <a href="{% url 'events'%}">Event List</a><br/>
+  <a href="{% url 'new_event'%}">New Event</a>
+  <p><strong>Period</strong> <a href="{% url 'period_detail' event_detail.period_id%}">{{ event_detail.period_id }}</a></p>
+  <p><strong>Default Frequency</strong> {{ event_detail.default_frequency }}</p>
+  <p><strong>Name</strong> {{ event_detail.display_name }}</p>
+  <p><strong>Comment</strong> {{ event_detail.comment }}</p>
+  <p><strong>Time Created</strong> {{ event_detail.time_created_string }}</p>
+  <p><strong>Time Modified</strong> {{ event_detail.time_modified_string }}</p>
+{% endblock %}

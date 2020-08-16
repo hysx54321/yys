@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'income_calculator.apps.IncomeCalculatorConfig',
+    'bootstrap_pagination',
 ]
 
 MIDDLEWARE = [

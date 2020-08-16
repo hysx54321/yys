@@ -1,18 +1,19 @@
 from django.db import models
 from datetime import datetime
 
+
 # Create your models here.
 class BasicModel(models.Model):
     id = models.AutoField(primary_key=True)
-    description = models.CharField(max_length=50)  # a short description of the object
-    comment = models.TextField(null=True)
+    display_name = models.CharField(max_length=50)  # The display name of the object
+    comment = models.TextField(null=True)  # a short description of the object
     time_created = models.PositiveIntegerField()
     time_modified = models.PositiveIntegerField()
     deleted = models.BooleanField()
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.description
+        return self.display_name
 
     @property
     def time_created_string(self):
@@ -24,7 +25,6 @@ class BasicModel(models.Model):
 
 
 class Event(BasicModel):
-    display_name = models.CharField(max_length=20)
     priority = models.SmallIntegerField()
     default_frequency = models.IntegerField()
     icon = models.TextField(null=True)
@@ -52,4 +52,5 @@ class Item(BasicModel):
 class Period(BasicModel):
     num_days = models.PositiveIntegerField()
 
-
+    def __str__(self):
+        return self.display_name + ' (' + str(self.num_days) + ' days)'

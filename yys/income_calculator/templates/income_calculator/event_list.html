@@ -1,0 +1,40 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Event List</h1>
+<a href="{% url 'new_event'%}">New Event</a>
+  {% if event_list %}
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Comment</th>
+        <th>Time Created</th>
+        <th>Time Modified</th>
+        <th>Period</th>
+        <th>Edit</th>
+        <th>Entities</th>
+        <th>Delete</th>
+      </tr>
+      {% for event in event_list %}
+        <tr>
+          <td><a href="{% url 'event_detail' event.id%}">{{ event.display_name }}</a></td>
+          <td>{{ event.comment }}</td>
+          <td>{{ event.time_created_string }}</td>
+          <td>{{ event.time_modified_string }}</td>
+          <td><a href="{% url 'period_detail' event.period_id%}">{{ event.period_id }}</a></td>
+          <td><a href="{% url 'event_edit' event.id %}">Edit</a></td>
+          <td><a href="{% url 'event_entities_by_event' event.id %}">See</a></td>
+          <td>
+          <form action="{% url 'event_delete' %}" method="post" onsubmit="return confirm('Do you really want to delete {{ event }}?')">
+            {% csrf_token %}
+            <input type="hidden" name="event_id" value="{{event.id}}">
+            <input type="submit" value="Delete">
+          </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p>There are no events.</p>
+  {% endif %}
+{% endblock %}

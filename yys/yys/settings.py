@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'income_calculator.apps.IncomeCalculatorConfig',
+    'income_calculator',
     'bootstrap_pagination',
 ]
 

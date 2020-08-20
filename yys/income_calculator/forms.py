@@ -72,8 +72,11 @@ class NewEventForm(forms.Form):
 class NewEventEntityForm(forms.Form):
     def __init__(self, event, *args, **kwargs):
         super(NewEventEntityForm, self).__init__(*args, **kwargs)
-        self.fields['period_id'].choices = get_item_choices_for_creating_event_entity(event)
+        self.fields['item_id'].choices = get_item_choices_for_creating_event_entity(event)
 
     display_name = forms.CharField()
     comment = forms.CharField(widget=forms.Textarea)
-    period_id = forms.ChoiceField()
+    maximum = forms.IntegerField()
+    minimum = forms.IntegerField()
+    expectation_value = forms.IntegerField()
+    item_id = forms.ChoiceField()

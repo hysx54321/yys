@@ -3,9 +3,8 @@ from django import template
 register = template.Library()
 
 
-def shit(value, arg):
-    return value.replace(arg, '')
-
-
-def cut(value):
-    return value+1
+@register.filter
+def get_object_by_id(value, period_id):
+    for p in value:
+        if p.id == period_id:
+            return p

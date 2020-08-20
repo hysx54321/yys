@@ -131,6 +131,24 @@ class EventDetailView(generic.DetailView):
     model = Event
     context_object_name = 'event_detail'
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+
+        # Get periods
+        periods = db_accessor.get_active_periods()
+        context['periods'] = periods
+
+        # Get event entities
+        event_entities = db_accessor.get_event_entities_by_event_id(event_id=self.kwargs['pk'])
+        context['event_entity_list'] = event_entities
+
+        # Get Items
+        items = db_accessor.get_active_items()
+        context['items'] = items
+
+        return context
+
 
 class EventListView(generic.ListView):
     model = Event
@@ -149,24 +167,6 @@ class EventListView(generic.ListView):
         # self.user = get_object_or_404(User, id=self.kwargs['user_id'])
         periods = db_accessor.get_active_periods()
         context['periods'] = periods
-        return context
-
-
-class EventEntitiesByEventView(generic.ListView):
-    model = EventEntity
-    template_name = 'income_calculator/event_entities_by_event_list.html'
-    context_object_name = 'event_entity_list'
-
-    def get_queryset(self):
-        event_entities = db_accessor.get_event_entities_by_event_id(self.kwargs['event_id'])
-        return event_entities
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Add in the publisher
-        # self.user = get_object_or_404(User, id=self.kwargs['user_id'])
-        context['event'] = db_accessor.get_event_by_id(self.kwargs['event_id'])
         return context
 
 
@@ -190,18 +190,21 @@ def new_event(request):
 
 
 def new_event_entity(request, event_id):
+    event = db_accessor.get_event_by_id(event_id)
     if request.method == 'POST':
-        form = NewEventForm(request.POST)
+        form = NewEventEntityForm(event, request.POST)
         if form.is_valid():
-            event = db_accessor.create_event_entity(
-                period_id=form.cleaned_data['period_id'],
-                default_frequency=form.cleaned_data['default_frequency'],
+            event_entity = db_accessor.create_event_entity(
+                event=event,
+                item_id=form.cleaned_data['item_id'],
                 display_name=form.cleaned_data['display_name'],
                 comment=form.cleaned_data['comment'],
+                maximum=form.cleaned_data['maximum'],
+                minimum=form.cleaned_data['minimum'],
+                expectation_value=form.cleaned_data['expectation_value'],
             )
             return HttpResponseRedirect(reverse('event_detail', kwargs={'pk': event.id}))
     else:
-        event = db_accessor.get_event_by_id(event_id)
         form = NewEventEntityForm(initial={'comment': "ywdltql"}, event=event)
     context = {
         'form': form,

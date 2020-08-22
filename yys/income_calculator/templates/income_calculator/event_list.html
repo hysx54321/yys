@@ -2,7 +2,7 @@
 {% load template_filters %}
 {% block content %}
   <h1>Event List</h1>
-<a href="{% url 'new_event'%}">New Event</a>
+  <a href="{% url 'new_event'%}">New Event</a>
   {% if event_list %}
     <table>
       <tr>

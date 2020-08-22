@@ -21,24 +21,28 @@ from income_calculator import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+
     path('events/', views.EventListView.as_view(), name='events'),
     path('event/<int:pk>/', views.EventDetailView.as_view(), name='event_detail'),
-    path('event/delete', views.delete_item, name='event_delete'),
-    path('event/<int:event_id>/edit', views.delete_item, name='event_edit'),
+    path('event/delete', views.delete_event, name='event_delete'),
+    path('event/<int:event_id>/edit', views.update_event, name='event_edit'),
     path('event/<int:event_id>/new_entity', views.new_event_entity, name='new_event_entity'),
-    path('new_event/', views.new_event, name='new_event'),
-    path('event_entities/<int:event_entity_id>/edit', views.delete_item, name='event_entity_edit'),
-    path('event_entity/delete', views.delete_item, name='event_entity_delete'),
-    path('event_entity/', views.delete_item, name='event_entities'),
+    path('event/new', views.new_event, name='new_event'),
+
+    path('event_entities/<int:event_entity_id>/edit', views.update_event_entity, name='event_entity_edit'),
+    path('event_entity/delete', views.delete_event_entity, name='event_entity_delete'),
+
     path('event_groups/', views.delete_item, name='event_groups'),
+
     path('items/', views.ItemListView.as_view(), name='items'),
-    path('new_item/', views.new_item, name='new_item'),
+    path('item/new', views.new_item, name='new_item'),
     path('item/<int:pk>/', views.ItemDetailView.as_view(), name='item_detail'),
     path('item/delete', views.delete_item, name='item_delete'),
-    path('item/<int:item_id>/edit', views.delete_item, name='item_edit'),
+    path('item/<int:item_id>/edit', views.update_item, name='item_edit'),
+
     path('periods/', views.PeriodListView.as_view(), name='periods'),
-    path('new_period/', views.new_period, name='new_period'),
+    path('period/new', views.new_period, name='new_period'),
     path('period/<int:pk>/', views.PeriodDetailView.as_view(), name='period_detail'),
-    path('period/<int:item_id>/edit', views.delete_item, name='period_edit'),
+    path('period/<int:period_id>/edit', views.update_period, name='period_edit'),
     path('period/delete', views.delete_period, name='period_delete'),
 ]

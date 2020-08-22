@@ -17,21 +17,21 @@ def get_period_choices():
     return choices
 
 
-def get_item_choices_for_creating_event_entity(event):
+def get_item_choices_for_event_entity(event, existing_event_entity):
     items = db_accessor.get_active_items()
     existing_event_entities = db_accessor.get_event_entities_by_event_id(event.id)
-    items_to_create = []
+    items_list = []
     for item in items:
-        created = False
+        wanted = True
         for entity in existing_event_entities:
-            if item.id == entity.item_id:
-                created = True
+            if item.id == entity.item_id and (not existing_event_entity or entity.id != existing_event_entity.id):
+                wanted = False
                 break
 
-        if not created:
-            items_to_create.append((item.id, item))
+        if wanted:
+            items_list.append((item.id, item))
 
-    return items_to_create
+    return items_list
 
 
 class SaveGameForm(forms.Form):
@@ -51,32 +51,40 @@ class SaveGameForm(forms.Form):
         return data + random.randint(1, 50)
 
 
-class NewItemForm(forms.Form):
+class ItemForm(forms.Form):
     display_name = forms.CharField()
     comment = forms.CharField(widget=forms.Textarea)
 
 
-class NewPeriodForm(forms.Form):
+class PeriodForm(forms.Form):
     num_days = forms.IntegerField()
     display_name = forms.CharField()
     comment = forms.CharField(widget=forms.Textarea)
 
 
-class NewEventForm(forms.Form):
+class EventForm(forms.Form):
     default_frequency = forms.IntegerField()
     display_name = forms.CharField()
     comment = forms.CharField(widget=forms.Textarea)
-    period_id = forms.ChoiceField(choices=get_period_choices())
+    period_id = forms.ChoiceField(label='Period', choices=get_period_choices())
 
 
-class NewEventEntityForm(forms.Form):
-    def __init__(self, event, *args, **kwargs):
-        super(NewEventEntityForm, self).__init__(*args, **kwargs)
-        self.fields['item_id'].choices = get_item_choices_for_creating_event_entity(event)
+class EventEntityForm(forms.Form):
+    def __init__(self, event, existing_event_entity, *args, **kwargs):
+        super(EventEntityForm, self).__init__(*args, **kwargs)
+        self.fields['item_id'].choices = get_item_choices_for_event_entity(event, existing_event_entity)
 
     display_name = forms.CharField()
     comment = forms.CharField(widget=forms.Textarea)
     maximum = forms.IntegerField()
     minimum = forms.IntegerField()
     expectation_value = forms.IntegerField()
-    item_id = forms.ChoiceField()
+    item_id = forms.ChoiceField(label='Item')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        maximum = cleaned_data.get("maximum")
+        minimum = cleaned_data.get("minimum")
+        expectation_value = cleaned_data.get("expectation_value")
+        if expectation_value > maximum or expectation_value < minimum:
+            raise ValidationError("Expectation should be between maximum and minimum!")

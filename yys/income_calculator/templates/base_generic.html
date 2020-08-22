@@ -23,7 +23,6 @@
           <li><a href="{% url 'items' %}">Items</a></li>
           <li><a href="{% url 'periods' %}">Periods</a></li>
           <li><a href="{% url 'events' %}">Events</a></li>
-          <li><a href="{% url 'event_entities' %}">Event Entities</a></li>
           <hr/>
           {% if user.is_authenticated %}
           <li>User: {{ user.get_username }}</li>

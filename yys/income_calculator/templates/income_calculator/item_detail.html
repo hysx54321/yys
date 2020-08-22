@@ -7,4 +7,10 @@
   <p><strong>Comment</strong> {{ item_detail.comment }}</p>
   <p><strong>Time Created</strong> {{ item_detail.time_created_string }}</p>
   <p><strong>Time Modified</strong> {{ item_detail.time_modified_string }}</p>
+  <a href="{% url 'item_edit' item_detail.id %}">Edit</a>
+  <form action="{% url 'item_delete' %}" method="post" onsubmit="return confirm('Do you really want to delete {{ item_detail }}?')">
+    {% csrf_token %}
+    <input type="hidden" name="item_id" value="{{item_detail.id}}">
+    <input type="submit" value="Delete">
+  </form>
 {% endblock %}

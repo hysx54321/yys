@@ -8,4 +8,10 @@
   <p><strong>Comment</strong> {{ period_detail.comment }}</p>
   <p><strong>Time Created</strong> {{ period_detail.time_created_string }}</p>
   <p><strong>Time Modified</strong> {{ period_detail.time_modified_string }}</p>
+  <td><a href="{% url 'period_edit' period_detail.id %}">Edit</a></td>
+  <form action="{% url 'period_delete' %}" method="post" onsubmit="return confirm('Do you really want to delete {{ period_detail }}?')">
+    {% csrf_token %}
+    <input type="hidden" name="period_id" value="{{period_detail.id}}">
+    <input type="submit" value="Delete">
+  </form>
 {% endblock %}

@@ -6,8 +6,7 @@
   {% if period_list %}
     <table>
       <tr>
-        <th>Number of Days</th>
-        <th>Name</th>
+        <th>Period</th>
         <th>Comment</th>
         <th>Time Created</th>
         <th>Time Modified</th>
@@ -16,8 +15,7 @@
       </tr>
       {% for period in period_list %}
         <tr>
-          <td>{{ period.num_days }}</td>
-          <td>{{ period.display_name }}</td>
+          <td><a href="{% url 'period_detail' period.id %}">{{ period }}</a></td>
           <td>{{ period.comment }}</td>
           <td>{{ period.time_created_string }}</td>
           <td>{{ period.time_modified_string }}</td>

@@ -45,6 +45,24 @@ def get_events(**kwargs):
     return Event.objects.filter(**kwargs)
 
 
+def get_active_events():
+    return get_events(deleted=False)
+
+
+def update_event(event_id, **kwargs):
+    event = get_event_by_id(event_id)
+    if not event:
+        return
+    for key, value in kwargs.items():
+        setattr(event, key, value)
+    event.time_modified = utils.get_current_timestamp()
+    event.save()
+
+
+def delete_event(event_id):
+    update_event(event_id, deleted=True)
+
+
 # Event Entity
 def create_event_entity(
     event,
@@ -80,11 +98,25 @@ def get_event_entity_by_id(event_entity_id):
 
 
 def get_event_entities_by_event_id(event_id):
-    return EventEntity.objects.filter(event_id=event_id)
+    return EventEntity.objects.filter(event_id=event_id, deleted=False)
 
 
 def get_event_entities_by_period_id_and_item_id(period_id, item_id):
     return EventEntity.objects.filter(period_id=period_id, item_id=item_id)
+
+
+def update_event_entity(event_entity_id, **kwargs):
+    event_entity = get_event_entity_by_id(event_entity_id)
+    if not event_entity:
+        return
+    for key, value in kwargs.items():
+        setattr(event_entity, key, value)
+    event_entity.time_modified = utils.get_current_timestamp()
+    event_entity.save()
+
+
+def delete_event_entity(event_entity_id):
+    update_event_entity(event_entity_id, deleted=True)
 
 
 # Event Group
@@ -136,13 +168,17 @@ def get_active_items():
 
 
 def delete_item(item_id):
-    items = Item.objects.filter(id=item_id)
-    if not items:
+    update_item(item_id, deleted=True)
+
+
+def update_item(item_id, **kwargs):
+    item = get_item_by_id(item_id)
+    if not item:
         return
-    item = items[0]
-    item.deleted = True
+    for key, value in kwargs.items():
+        setattr(item, key, value)
+    item.time_modified = utils.get_current_timestamp()
     item.save()
-    return item
 
 
 # Period
@@ -175,10 +211,14 @@ def get_active_periods():
 
 
 def delete_period(period_id):
-    periods = Period.objects.filter(id=period_id)
-    if not periods:
+    update_period(period_id, deleted=True)
+
+
+def update_period(period_id, **kwargs):
+    period = get_period_by_id(period_id)
+    if not period:
         return
-    period = periods[0]
-    period.deleted = True
+    for key, value in kwargs.items():
+        setattr(period, key, value)
+    period.time_modified = utils.get_current_timestamp()
     period.save()
-    return period

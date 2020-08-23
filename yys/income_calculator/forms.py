@@ -74,7 +74,6 @@ class EventEntityForm(forms.Form):
         super(EventEntityForm, self).__init__(*args, **kwargs)
         self.fields['item_id'].choices = get_item_choices_for_event_entity(event, existing_event_entity)
 
-    display_name = forms.CharField()
     comment = forms.CharField(widget=forms.Textarea)
     maximum = forms.IntegerField()
     minimum = forms.IntegerField()

@@ -66,15 +66,15 @@ def delete_event(event_id):
 # Event Entity
 def create_event_entity(
     event,
-    display_name,
     minimum,
     maximum,
     expectation_value,
     comment,
     item_id,
+    display_name=None,
 ):
     new_event_entity = EventEntity(
-        display_name=display_name,
+        display_name=display_name or 'N.A.',
         min=minimum,
         max=maximum,
         expectation_value=expectation_value,

@@ -39,7 +39,6 @@
 <table>
   <tr>
     <th>Item</th>
-    <th>Name</th>
     <th>Comment</th>
     <th>Max</th>
     <th>Min</th>
@@ -53,7 +52,6 @@
   {% for event_entity in event_entity_list %}
     <tr>
       <td><a href="{% url 'item_detail' event_entity.item_id%}">{{ items|get_object_by_id:event_entity.item_id }}</a></td>
-      <td>{{ event_entity.display_name }}</td>
       <td>{{ event_entity.comment }}</td>
       <td>{{ event_entity.max }}</td>
       <td>{{ event_entity.min }}</td>

@@ -54,7 +54,7 @@ def new_item(request):
                 display_name=form.cleaned_data['display_name'],
                 comment=form.cleaned_data['comment'],
             )
-            return HttpResponseRedirect(reverse('item_detail', kwargs={'pk': item.id}))
+            return HttpResponseRedirect(reverse('item_detail', kwargs={'item_id': item.id}))
     else:
         form = ItemForm(initial={'comment': "ywdltql"})
     context = {
@@ -72,7 +72,7 @@ def update_item(request, item_id):
                 display_name=form.cleaned_data['display_name'],
                 comment=form.cleaned_data['comment'],
             )
-            return HttpResponseRedirect(reverse('item_detail', kwargs={'pk': item_id}))
+            return HttpResponseRedirect(reverse('item_detail', kwargs={'item_id': item_id}))
     else:
         item = db_accessor.get_item_by_id(item_id)
         form = ItemForm(initial={
@@ -88,7 +88,7 @@ def update_item(request, item_id):
 
 class ItemListView(generic.ListView):
     model = Item
-    paginate_by = 5
+    paginate_by = 8
 
     def get_queryset(self):
         items = db_accessor.get_active_items()
@@ -307,7 +307,6 @@ def new_event_entity(request, event_id):
             event_entity = db_accessor.create_event_entity(
                 event=event,
                 item_id=form.cleaned_data['item_id'],
-                display_name=form.cleaned_data['display_name'],
                 comment=form.cleaned_data['comment'],
                 maximum=form.cleaned_data['maximum'],
                 minimum=form.cleaned_data['minimum'],
@@ -341,7 +340,6 @@ def update_event_entity(request, event_entity_id):
             db_accessor.update_event_entity(
                 event_entity_id=event_entity_id,
                 item_id=form.cleaned_data['item_id'],
-                display_name=form.cleaned_data['display_name'],
                 comment=form.cleaned_data['comment'],
                 max=form.cleaned_data['maximum'],
                 min=form.cleaned_data['minimum'],
@@ -354,7 +352,6 @@ def update_event_entity(request, event_entity_id):
             event_entity,
             initial={
                 'item_id': event_entity.item_id,
-                'display_name': event_entity.display_name,
                 'comment': event_entity.comment,
                 'maximum': event_entity.max,
                 'minimum': event_entity.min,

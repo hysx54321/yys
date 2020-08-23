@@ -45,8 +45,8 @@ def get_events(**kwargs):
     return Event.objects.filter(**kwargs)
 
 
-def get_active_events():
-    return get_events(deleted=False)
+def get_active_events(**kwargs):
+    return get_events(deleted=False, **kwargs)
 
 
 def update_event(event_id, **kwargs):
@@ -101,8 +101,8 @@ def get_event_entities_by_event_id(event_id):
     return EventEntity.objects.filter(event_id=event_id, deleted=False)
 
 
-def get_event_entities_by_period_id_and_item_id(period_id, item_id):
-    return EventEntity.objects.filter(period_id=period_id, item_id=item_id)
+def get_event_entities_by_event_id_and_item_id(event_id, item_id):
+    return EventEntity.objects.filter(event_id=event_id, item_id=item_id, deleted=False)
 
 
 def update_event_entity(event_entity_id, **kwargs):

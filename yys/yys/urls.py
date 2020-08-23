@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
 
+    # path('events/', views.event_list, name='events'),
     path('events/', views.EventListView.as_view(), name='events'),
     path('event/<int:pk>/', views.EventDetailView.as_view(), name='event_detail'),
     path('event/delete', views.delete_event, name='event_delete'),
@@ -36,7 +37,7 @@ urlpatterns = [
 
     path('items/', views.ItemListView.as_view(), name='items'),
     path('item/new', views.new_item, name='new_item'),
-    path('item/<int:pk>/', views.ItemDetailView.as_view(), name='item_detail'),
+    path('item/<int:item_id>/', views.item_detail, name='item_detail'),
     path('item/delete', views.delete_item, name='item_delete'),
     path('item/<int:item_id>/edit', views.update_item, name='item_edit'),
 

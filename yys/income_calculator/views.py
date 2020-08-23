@@ -97,9 +97,31 @@ class ItemListView(generic.ListView):
         return items
 
 
-class ItemDetailView(generic.DetailView):
-    model = Item
-    context_object_name = 'item_detail'
+def item_detail(request, item_id):
+    item = db_accessor.get_item_by_id(item_id)
+    periods = db_accessor.get_active_periods()
+    events = None
+    wanted_event_entities = []
+    total_income = 0
+    if request.GET.get('period_id'):
+        print('hello')
+        period_id = int(request.GET['period_id'])
+        events = db_accessor.get_active_events(period_id=period_id)
+        for event in events:
+            event_entities = db_accessor.get_event_entities_by_event_id_and_item_id(event.id, item_id)
+            if event_entities:
+                event_entity = event_entities[0]
+                wanted_event_entities.append(event_entity)
+                total_income += event.default_frequency * event_entity.expectation_value
+
+    context = {
+        'item_detail': item,
+        'periods': periods,
+        'events': events,
+        'event_entities': wanted_event_entities,
+        'total_income': total_income,
+    }
+    return render(request, 'income_calculator/item_detail.html', context)
 
 
 def new_period(request):
@@ -199,7 +221,11 @@ class EventListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        events = db_accessor.get_events(deleted=False)
+        if self.request.GET.get('period_id'):
+            events = db_accessor.get_active_events(period_id=self.request.GET['period_id'])
+        else:
+            events = db_accessor.get_active_events()
+
         if events:
             return events.order_by('-priority')
         return events
@@ -211,6 +237,10 @@ class EventListView(generic.ListView):
         periods = db_accessor.get_active_periods()
         context['periods'] = periods
         return context
+
+
+def event_list(request):
+    return EventListView.as_view
 
 
 def new_event(request):

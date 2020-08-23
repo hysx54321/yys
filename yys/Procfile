@@ -1,0 +1,1 @@
+web: gunicorn income_calculator.wsgi --log-file -

@@ -102,9 +102,9 @@ def item_detail(request, item_id):
     periods = db_accessor.get_active_periods()
     events = None
     wanted_event_entities = []
-    total_income = 0
+    income_sum = 0
+    income_sum_of_shorter_periods = 0
     if request.GET.get('period_id'):
-        print('hello')
         period_id = int(request.GET['period_id'])
         events = db_accessor.get_active_events(period_id=period_id)
         for event in events:
@@ -112,13 +112,28 @@ def item_detail(request, item_id):
             if event_entities:
                 event_entity = event_entities[0]
                 wanted_event_entities.append(event_entity)
-                total_income += event.default_frequency * event_entity.expectation_value
+                income_sum += event.default_frequency * event_entity.expectation_value
 
+        period = db_accessor.get_period_by_id(period_id)
+        shorter_periods = db_accessor.get_active_periods(num_days__lt=period.num_days)
+        for shorter_period in shorter_periods:
+            period_sum = 0
+            events_from_shorter_period = db_accessor.get_active_events(period_id=shorter_period.id)
+            for event in events_from_shorter_period:
+                event_entities = db_accessor.get_event_entities_by_event_id_and_item_id(event.id, item_id)
+                if event_entities:
+                    event_entity = event_entities[0]
+                    period_sum += event.default_frequency * event_entity.expectation_value
+            income_sum_of_shorter_periods += int(period_sum * period.num_days / shorter_period.num_days)
+
+    total_income = income_sum + income_sum_of_shorter_periods
     context = {
         'item_detail': item,
         'periods': periods,
         'events': events,
         'event_entities': wanted_event_entities,
+        'income_sum': income_sum,
+        'income_sum_of_shorter_periods': income_sum_of_shorter_periods,
         'total_income': total_income,
     }
     return render(request, 'income_calculator/item_detail.html', context)
@@ -227,7 +242,7 @@ class EventListView(generic.ListView):
             events = db_accessor.get_active_events()
 
         if events:
-            return events.order_by('-priority')
+            return events.order_by('display_name')
         return events
 
     def get_context_data(self, **kwargs):

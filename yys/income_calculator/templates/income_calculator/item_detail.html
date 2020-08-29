@@ -38,6 +38,7 @@
     <tr>
       <th>Name</th>
       <th>Comment</th>
+      <th>Extra Comment</th>
       <th>Max</th>
       <th>Min</th>
       <th>EV</th>
@@ -48,6 +49,7 @@
     {% for event_entity in event_entities %}
       <tr>
         <td><a href="{% url 'event_detail' events|get_object_by_id:event_entity.event_id|get_attribute:'id' %}">{{ events|get_object_by_id:event_entity.event_id }}</a></td>
+        <td>{{ events|get_object_by_id:event_entity.event_id|get_attribute:'comment' }}</td>
         <td>{{ event_entity.comment }}</td>
         <td>{{ event_entity.max }}</td>
         <td>{{ event_entity.min }}</td>
@@ -67,8 +69,12 @@
       </tr>
     {% endfor %}
     </table>
-  <h1>Total</h1>
-  <p><strong>{{ total_income }}</strong></p>
+  <h3>Sum</h3>
+  <p>{{ income_sum }}</p>
+  <h3>Sum of shorter periods</h3>
+  <p>{{ income_sum_of_shorter_periods }}</p>
+  <h3>Total</h3>
+  <p>{{ total_income }}</p>
   {% else %}
     <p>No events</p>
   {% endif %}

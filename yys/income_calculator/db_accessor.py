@@ -206,8 +206,8 @@ def get_periods(**kwargs):
     return Period.objects.filter(**kwargs)
 
 
-def get_active_periods():
-    return get_periods(deleted=False)
+def get_active_periods(**kwargs):
+    return get_periods(deleted=False, **kwargs)
 
 
 def delete_period(period_id):

@@ -31,7 +31,14 @@
   <h1>Sources</h1>
   |
   {% for period in periods %}
-    <a href="{% url 'item_detail' item_id=item_detail.id%}?period_id={{ period.id }}"> {{ period }} </a>|
+    {% if period.id == period_id %}
+      <b>
+    {% endif %}
+    <a href="{% url 'item_detail' item_id=item_detail.id%}?period_id={{ period.id }}"> {{ period }} </a>
+        {% if period.id == period_id %}
+      </b>
+    {% endif %}
+    |
   {% endfor %}
   {% if event_entities %}
     <table>
@@ -69,13 +76,14 @@
       </tr>
     {% endfor %}
     </table>
+
+  {% else %}
+    <p>No events</p>
+  {% endif %}
   <h3>Sum</h3>
   <p>{{ income_sum }}</p>
   <h3>Sum of shorter periods</h3>
   <p>{{ income_sum_of_shorter_periods }}</p>
   <h3>Total</h3>
   <p>{{ total_income }}</p>
-  {% else %}
-    <p>No events</p>
-  {% endif %}
 {% endblock %}

@@ -222,3 +222,19 @@ def update_period(period_id, **kwargs):
         setattr(period, key, value)
     period.time_modified = utils.get_current_timestamp()
     period.save()
+
+
+def clean_data():
+    models = [
+        Event,
+        Item,
+        Period,
+        EventEntity,
+        EventGroup,
+    ]
+    for model in models:
+        all_objects = model.objects.all()
+        for obj in all_objects:
+            if obj.comment == 'ywdltql':
+                obj.comment = ''
+                obj.save()

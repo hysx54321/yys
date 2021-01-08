@@ -23,6 +23,7 @@
           <li><a href="{% url 'items' %}">Items</a></li>
           <li><a href="{% url 'periods' %}">Periods</a></li>
           <li><a href="{% url 'events' %}">Events</a></li>
+            <li><a href="{% url 'speed_calculator'%}">Speed Calculator</a></li>
           <hr/>
           {% if user.is_authenticated %}
           <li>User: {{ user.get_username }}</li>

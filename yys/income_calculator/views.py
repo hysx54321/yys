@@ -125,10 +125,13 @@ def item_detail(request, item_id):
                     event_entity = event_entities[0]
                     period_sum += event.default_frequency * event_entity.expectation_value
             income_sum_of_shorter_periods += int(period_sum * period.num_days / shorter_period.num_days)
+    else:
+        period_id = None
 
     total_income = income_sum + income_sum_of_shorter_periods
     context = {
         'item_detail': item,
+        'period_id': period_id,
         'periods': periods,
         'events': events,
         'event_entities': wanted_event_entities,
@@ -377,3 +380,11 @@ def update_event_entity(request, event_entity_id):
         'form': form,
     }
     return render(request, 'income_calculator/generic_form.html', context)
+
+
+def speed_calculator(request):
+    context = {
+
+    }
+    return render(request, 'speed_calculator.html', context)
+    return

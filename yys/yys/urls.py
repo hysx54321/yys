@@ -46,4 +46,8 @@ urlpatterns = [
     path('period/<int:pk>/', views.PeriodDetailView.as_view(), name='period_detail'),
     path('period/<int:period_id>/edit', views.update_period, name='period_edit'),
     path('period/delete', views.delete_period, name='period_delete'),
+
+    path('speed_calculator/', views.speed_calculator, name='speed_calculator'),
+    path('speed_calculator/tuila', views.speed_calculator, name='tuila'),
+    path('speed_calculator/baimian', views.speed_calculator, name='baimian'),
 ]

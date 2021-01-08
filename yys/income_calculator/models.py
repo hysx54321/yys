@@ -52,5 +52,9 @@ class Item(BasicModel):
 class Period(BasicModel):
     num_days = models.PositiveIntegerField()
 
+    class Meta:
+        ordering = ('num_days', )
+
     def __str__(self):
-        return self.display_name + ' (' + str(self.num_days) + ' days)'
+        days_suffix = 's' if self.num_days > 1 else ''
+        return self.display_name + ' (' + str(self.num_days) + ' day' + days_suffix + ')'
